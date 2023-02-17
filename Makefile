@@ -6,3 +6,6 @@ mongoshell:
 
 mongoversion:
 	docker exec -it mongodb mongod --version
+
+start-db:
+	docker start mongodb
