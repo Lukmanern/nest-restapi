@@ -4,14 +4,17 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TransfersModule } from './transfers/transfers.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ChatGateway } from './chat.gateway';
+import { EventsModule } from './_events/events.module';
 
 @Module({
   imports: [
     UsersModule,
     TransfersModule,
     MongooseModule.forRoot('mongodb://localhost/nest'),
+    EventsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway],
 })
 export class AppModule {}
