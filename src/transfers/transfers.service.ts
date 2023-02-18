@@ -17,7 +17,6 @@ export class TransfersService {
   ) {}
 
   async create(createTransferDto: CreateTransferDto) {
-    //     return createTransferDto['amount'];
     if (createTransferDto['amount'] <= 0) {
       throw new PreconditionFailedException(
         'Proses Failed, amount is zero (has no effect)',
