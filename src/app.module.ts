@@ -6,6 +6,7 @@ import { TransfersModule } from './transfers/transfers.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChatGateway } from './chat.gateway';
 import { EventsModule } from './_events/events.module';
+import { DbBackupsModule } from './db_backups/db_backups.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { EventsModule } from './_events/events.module';
     TransfersModule,
     MongooseModule.forRoot('mongodb://localhost/nest'),
     EventsModule,
+    DbBackupsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ChatGateway],
