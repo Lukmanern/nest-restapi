@@ -12,7 +12,7 @@ import { DbBackupsModule } from './db_backups/db_backups.module';
   imports: [
     UsersModule,
     TransfersModule,
-    MongooseModule.forRoot('mongodb://localhost/nest'),
+    MongooseModule.forRoot('mongodb://127.0.0.1:27017/nest'),
     EventsModule,
     DbBackupsModule,
   ],

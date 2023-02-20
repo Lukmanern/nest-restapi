@@ -4,51 +4,61 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class DbBackupsService {
   create() {
-    const Docker = require('dockerode');
-    const tar = require('tar-fs');
-    const fs = require('fs');
+    const shell = require('shelljs');
+    const file =
+      'C:/Users/Lenovo/OneDrive/Documents/Dev NestJS/simple-test-case/backup/' +
+      Date.now();
+    const uri = 'mongodb://127.0.0.1:27017/nest';
+    shell.exec('mongodump --uri="' + uri + '" --out="' + file + '"');
 
-    const docker = new Docker();
+    const conn = this.__createConnectionToMySQL();
+    const queryInsert = `
+      INSERT INTO backup_logs (file)
+      VALUES (?);
+      `;
 
-    const containerName = 'mongodb';
-    const backupDir = '/xxxxxx';
-
-    const container = docker.getContainer(containerName);
-
-    container.inspect((err: any, data: { Mounts: any[] }) => {
+    conn.query(queryInsert, [file], function (err: any) {
       if (err) throw err;
+      console.log('1 record inserted');
+    });
+    return {
+      status: 'created',
+      message: 'Success Created new DB Backup',
+    };
+  }
 
-      const containerDataDir = data.Mounts.find(
-        (mount: { Destination: string }) => mount.Destination === '/data/db',
-      ).Source;
+  __createConnectionToMySQL(): any {
+    const mysql = require('mysql');
 
-      const backupStream = tar.pack(containerDataDir);
-
-      const backupFile = fs.createWriteStream(`${backupDir}/backup.tar`);
-
-      backupStream.pipe(backupFile);
-
-      backupFile.on('finish', () => {
-        console.log('Backup created successfully');
-      });
+    const con = mysql.createConnection({
+      port: 3306,
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'backup_database',
     });
 
-    return {
-      message: 'success',
-    };
+    con.connect((err: any) => {
+      if (err) {
+        console.log('Database Connection Failed !!!', err);
+      } else {
+        console.log('connected to Database');
+      }
+    });
+
+    return con;
   }
 }
 
 /*
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const shell = require('shelljs');
-    const time = Date.now();
+    
     shell.cd('C:/Users/Lenovo/OneDrive/Documents/Dev NestJS/simple-test-case/');
     return shell.exec(
-      'docker exec -T mongodb mongodump --uri="mongodb://localhost/nest" --out="xxx/xxx"',
+      'docker exec -T mongodb mongodump --uri="mongodb://127.0.0.1:27017/nest" --out="xxx/xxx"',
     );
     //     shell.exec(
-    //       `winpty docker exec -it mongodb mongodump --uri="mongodb://localhost/nest" --out="xxx/${time}"`,
+    //       `winpty docker exec -it mongodb mongodump --uri="mongodb://127.0.0.1:27017/nest" --out="xxx/${time}"`,
     //     );
     //     shell.exec('echo ll');
 

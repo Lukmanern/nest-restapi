@@ -13,31 +13,46 @@
       <ul id="messages"></ul>
     </div>
 
+    <!-- 
+      The following code defines a form for submitting 
+      a message and displaying it dynamically on the same 
+      page using websockets.
+      The form consists of an input field and a submit button.
+      -->
     <div>
       <input id="message" type="text" />
       <button onclick="handleSubmitNewMessage()">Submit</button>
     </div>
     <script>
+      // Connect to the server using websockets
       const socket = io('http://localhost:3000', { transports: ['websocket'] });
+
+      // Get the input and messages elements from the HTML
       const message = document.getElementById('message');
       const messages = document.getElementById('messages');
 
+      // handleSubmitNewMessage() sends the new message
+      // to the server when the submit button is clicked
       const handleSubmitNewMessage = () => {
         socket.emit('message', { data: message.value });
+        message.value = null;
       };
 
+      // When a new message is received from the server,
+      // call handleNewMessage() function
       socket.on('message', ({ data }) => {
         handleNewMessage(data);
       });
 
+      // handleNewMessage() creates a new message
+      // element and appends it to the list of messages
       const handleNewMessage = (message) => {
         messages.appendChild(buildNewMessage(message));
       };
 
+      // buildNewMessage() creates a new message element
       const buildNewMessage = (message) => {
         const time = new Date();
-        //   time =
-        //     time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
         const li = document.createElement('li');
         li.appendChild(document.createTextNode(message));
         li.appendChild(document.createElement('br'));

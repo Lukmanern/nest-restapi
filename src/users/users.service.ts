@@ -12,18 +12,18 @@ import { isValidObjectId } from 'mongoose';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private UserModel: Model<UserDocument>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createUserDto: CreateUserDto) {
     if (createUserDto['balance'] < 0 || createUserDto['balance'] == null) {
       createUserDto['balance'] = 0;
     }
-    const creatUser = new this.UserModel(createUserDto);
+    const creatUser = new this.userModel(createUserDto);
     return creatUser.save();
   }
 
   async findAll() {
-    return this.UserModel.find();
+    return this.userModel.find();
   }
 
   async findOne(id: string) {
@@ -31,7 +31,10 @@ export class UsersService {
     if (!isValidID) {
       throw new NotFoundException('User not found');
     }
-    const user = await this.UserModel.findById(id);
+    const user = await this.userModel.findById(id);
+    if (user == null) {
+      throw new NotFoundException('User not found');
+    }
     return user;
   }
 
@@ -53,5 +56,10 @@ export class UsersService {
     (await user).save();
 
     return user;
+  }
+
+  async remove(id: string) {
+    const user = this.findOne(id);
+    return (await user).delete();
   }
 }
