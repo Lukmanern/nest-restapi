@@ -3,10 +3,11 @@ FROM node:latest
 WORKDIR /usr/src/app
 
 COPY package*.json ./
+# COPY ./node_modules ./
 
 RUN npm install
 
-COPY ./src .
+COPY ./src ./
 
 COPY tsconfig.json ./
 
