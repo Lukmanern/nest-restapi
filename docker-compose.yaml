@@ -1,1 +1,11 @@
 # ! THIS IS FOR MONGODB BACKUP !
+version: '1'
+services:
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+  mysql:
+    image: 'mysql:latest'
+  mongo:
+    image: 'mongo:latest'
