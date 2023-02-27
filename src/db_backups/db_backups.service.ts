@@ -3,26 +3,24 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class DbBackupsService {
-  async create() {
+ create() {
     const shell = require('shelljs');
-    const path = require('path');
-    const backupDir = path.join(__dirname, '..', 'backup');
-    const timestamp = Date.now().toString();
-    const backupFilePath = path.join(backupDir, timestamp);
-    const mongodbUri = 'mongodb://127.0.0.1:27017/nest';
+    const file =
+      'C:/Users/Lenovo/OneDrive/Documents/Dev NestJS/simple-test-case/backup/' +
+      Date.now();
+    const uri = 'mongodb://127.0.0.1:27017/nest';
+    shell.exec('mongodump --uri="' + uri + '" --out="' + file + '"');
 
-    shell.exec(`mongodump --uri="${mongodbUri}" --out="${backupFilePath}"`);
+    const conn = this.MySQLCOnnection();
+    const queryInsert = `
+      INSERT INTO backup_logs (file)
+      VALUES (?);
+      `;
 
-    const connection = this.MySQLCOnnection();
-
-    const query = `
-    INSERT INTO backup_logs (file)
-    VALUES (?);
-  `;
-
-    connection.execute(query, [backupFilePath]);
-    console.log('1 record inserted');
-
+    conn.query(queryInsert, [file], function (err: any) {
+      if (err) throw err;
+      console.log('1 record inserted');
+    });
     return {
       status: 'created',
       message: 'Success Created new DB Backup',
