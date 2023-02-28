@@ -8,7 +8,7 @@ export class CreateTransferDto {
   to_user_id: string;
 
   /**
-   * amount is ALWAYS MORE THAN ZERO
+   * amount is ALWAYS MORE THAN ZERO, can't zero
    **/
   @ApiProperty()
   amount: number;
