@@ -30,7 +30,7 @@
     "@nestjs/websockets": "^9.3.9",
     "dockerode": "^3.3.4",
     "mongo-backup": "^0.0.1",
-    "mongoose": "^6.11.3",
+    "mongoose": "^6.12.0",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
