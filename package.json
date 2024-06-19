@@ -25,7 +25,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/mongoose": "^9.2.1",
     "@nestjs/platform-express": "^10.3.6",
-    "@nestjs/platform-socket.io": "^9.3.9",
+    "@nestjs/platform-socket.io": "^10.0.4",
     "@nestjs/swagger": "^6.2.1",
     "@nestjs/websockets": "^9.3.9",
     "dockerode": "^3.3.4",
